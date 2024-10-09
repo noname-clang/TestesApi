@@ -107,18 +107,18 @@ describe("Testando rotas da API", () => {
       .catch(done); 
   });
 
-  it("Deve listar os usuários", (done) => {
-    request(app)
-      .get("/list")
-      .then((response) => {
-        expect(response.body.error).toBeUndefined();
-        console.log(response.body)
-        expect(Array.isArray(response.body)).toBe(true);
-        expect(response.body.users.length).toBeGreaterThan(0); // isso faz com que o esperado seja no minimo 1 user
-        done();
-      })
-      .catch(done); 
-  });
+it("Deve listar os usuários", (done) => {
+  request(app)
+    .get("/list")
+    .then((response) => {
+      expect(response.body.error).toBeUndefined();
+      expect(Array.isArray(response.body.list)).toBe(true); 
+      expect(response.body.list.length).toBeGreaterThan(0); // Espera que haja pelo menos um usuário
+      done();
+    })
+    .catch(done); 
+});
+
 
   it("Deve excluir um usuário", (done) => {
     request(app)
