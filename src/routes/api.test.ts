@@ -107,11 +107,12 @@ describe("Testando rotas da API", () => {
 
   it("Deve listar os usuários", (done) => {
     request(app)
-      .get("/list")
+      .get("/users")
       .then((response) => {
         expect(response.body.error).toBeUndefined();
+        console.log(response.body)
         expect(Array.isArray(response.body)).toBe(true);
-        expect(response.body.length).toBeGreaterThan(0); // isso faz com que o esperado seja no minimo 1 user
+        expect(response.body.users.length).toBeGreaterThan(0); // isso faz com que o esperado seja no minimo 1 user
         done();
       })
       .catch(done); 
@@ -119,8 +120,7 @@ describe("Testando rotas da API", () => {
 
   it("Deve excluir um usuário", (done) => {
     request(app)
-      .delete(`/delete/`)
-      .send(`Useremail=${userId}`)
+      .delete(`/delete/${userId}`)
       .then((response) => {
         expect(response.body.error).toBeUndefined();
         expect(response.body.message).toBe("Usuário excluído com sucesso");
@@ -131,8 +131,7 @@ describe("Testando rotas da API", () => {
 
   it("Não deve excluir um usuário inexistente", (done) => {
     request(app)
-    .delete(`/delete/`)
-    .send(`Useremail=${userId}`) // soca qualquer id aq
+      .delete(`/delete/999999`) // soca qualquer id aq
       .then((response) => {
         expect(response.body.error).not.toBeUndefined();
         expect(response.body.error).toBe("usuário nao encontrado");
