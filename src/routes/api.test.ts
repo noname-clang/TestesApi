@@ -107,25 +107,25 @@ describe("Testando rotas da API", () => {
       .catch(done); 
   });
 
-it("Deve listar os usuários", (done) => {
-  request(app)
-    .get("/list")
-    .then((response) => {
-      expect(response.body.error).toBeUndefined();
-      expect(Array.isArray(response.body.list)).toBe(true); 
-      expect(response.body.list.length).toBeGreaterThan(0); // Espera que haja pelo menos um usuário
-      done();
-    })
-    .catch(done); 
-});
-
+  it("Deve listar os usuários", (done) => {
+    request(app)
+      .get("/list")
+      .then((response) => {
+        expect(response.body.error).toBeUndefined();
+        expect(Array.isArray(response.body.list)).toBe(true); // Verifica se 'list' é um array
+        expect(response.body.list.length).toBeGreaterThan(0); // Espera que haja pelo menos um usuário
+        done();
+      })
+      .catch(done); 
+  });
+  
 
   it("Deve excluir um usuário", (done) => {
     request(app)
       .delete(`/delete/${userId}`)
       .then((response) => {
         expect(response.body.error).toBeUndefined();
-        expect(response.body.message).toBe("Usuário excluído com sucesso");
+        expect(response.body.message).toBe("Usuário excluído com sucesso!");
         done();
       })
       .catch(done); 
@@ -136,7 +136,7 @@ it("Deve listar os usuários", (done) => {
       .delete(`/delete/999999`) // soca qualquer id aq
       .then((response) => {
         expect(response.body.error).not.toBeUndefined();
-        expect(response.body.error).toBe("usuário nao encontrado");
+        expect(response.body.error).toBe("Usuário não encontrado.");
         done();
       })
       .catch(done); 
