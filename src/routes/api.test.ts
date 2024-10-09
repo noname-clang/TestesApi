@@ -28,7 +28,6 @@ describe("Testando rotas da API", () => {
       .send(`email=${email}&password=${password}`)
       .then((response) => {
         expect(response.body.error).toBeUndefined();
-        console.log(response.body)
         userId = response.body.id; // salva o id na variavel para usar dps 
         done();
       })
@@ -112,8 +111,8 @@ describe("Testando rotas da API", () => {
       .get("/list")
       .then((response) => {
         expect(response.body.error).toBeUndefined();
-        expect(Array.isArray(response.body.list)).toBe(true); // Verifica se 'list' é um array
-        expect(response.body.list.length).toBeGreaterThan(0); // Espera que haja pelo menos um usuário
+        expect(Array.isArray(response.body.list)).toBe(true); 
+        expect(response.body.list.length).toBeGreaterThan(0); 
         done();
       })
       .catch(done); 
@@ -122,7 +121,7 @@ describe("Testando rotas da API", () => {
 
   it("Deve excluir um usuário", (done) => {
     request(app)
-      .delete(`/delete/${userId}`)
+      .delete(`/delete/${email}`)
       .then((response) => {
         expect(response.body.error).toBeUndefined();
         expect(response.body.message).toBe("Usuário excluído com sucesso!");
