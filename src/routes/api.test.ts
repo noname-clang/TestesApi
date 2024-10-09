@@ -100,8 +100,8 @@ describe("Testando rotas da API", () => {
       .post("/login")
       .send(`email=${email}&password=wrongpassword`)
       .then((response) => {
-        expect(response.body.error).not.toBeUndefined();
-        expect(response.body.error).toBe("Credenciais inválidas");
+        expect(response.body.error).toBeUndefined();
+        expect(response.body.status).toBe(false); 
         done();
       })
       .catch(done); 
