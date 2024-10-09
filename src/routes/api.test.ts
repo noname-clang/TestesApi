@@ -2,6 +2,7 @@ import request from "supertest";
 import app from "../app";
 import { User } from "../models/User";
 
+
 describe("Testando rotas da API", () => {
   let email = "test@jest.com";
   let password = "1234";
@@ -27,6 +28,7 @@ describe("Testando rotas da API", () => {
       .send(`email=${email}&password=${password}`)
       .then((response) => {
         expect(response.body.error).toBeUndefined();
+        console.log(response.body)
         userId = response.body.id; // salva o id na variavel para usar dps 
         done();
       })
@@ -107,7 +109,7 @@ describe("Testando rotas da API", () => {
 
   it("Deve listar os usuários", (done) => {
     request(app)
-      .get("/users")
+      .get("/list")
       .then((response) => {
         expect(response.body.error).toBeUndefined();
         console.log(response.body)
