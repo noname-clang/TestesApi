@@ -5,6 +5,7 @@ import { User } from "../models/User";
 describe("Testando rotas da API", () => {
   let email = "test@jest.com";
   let password = "1234";
+  let userId = 1;
 
   beforeAll(async () => {
     await User.sync({ force: true });
@@ -26,6 +27,7 @@ describe("Testando rotas da API", () => {
       .send(`email=${email}&password=${password}`)
       .then((response) => {
         expect(response.body.error).toBeUndefined();
+        userId = response.body.user.id; // salva o id na variavel para usar dps 
         done();
       })
       .catch(done);  
@@ -86,6 +88,52 @@ describe("Testando rotas da API", () => {
       .then((response) => {
         expect(response.body.error).toBeUndefined();
         expect(response.body.status).toBe(true); 
+        done();
+      })
+      .catch(done); 
+  });
+
+  it("Não deve logar com os dados incorretos", (done) => {
+    request(app)
+      .post("/login")
+      .send(`email=${email}&password=wrongpassword`)
+      .then((response) => {
+        expect(response.body.error).not.toBeUndefined();
+        expect(response.body.error).toBe("Credenciais inválidas");
+        done();
+      })
+      .catch(done); 
+  });
+
+  it("Deve listar os usuários", (done) => {
+    request(app)
+      .get("/users")
+      .then((response) => {
+        expect(response.body.error).toBeUndefined();
+        expect(Array.isArray(response.body.users)).toBe(true);
+        expect(response.body.users.length).toBeGreaterThan(0); // isso faz com que o esperado seja no minimo 1 user
+        done();
+      })
+      .catch(done); 
+  });
+
+  it("Deve excluir um usuário", (done) => {
+    request(app)
+      .delete(`/delete/${userId}`)
+      .then((response) => {
+        expect(response.body.error).toBeUndefined();
+        expect(response.body.message).toBe("Usuário excluído com sucesso");
+        done();
+      })
+      .catch(done); 
+  });
+
+  it("Não deve excluir um usuário inexistente", (done) => {
+    request(app)
+      .delete(`/delete/999999`) // soca qualquer id aq
+      .then((response) => {
+        expect(response.body.error).not.toBeUndefined();
+        expect(response.body.error).toBe("Usuário não encontrado");
         done();
       })
       .catch(done); 
